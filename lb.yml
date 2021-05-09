@@ -1,0 +1,41 @@
+- name: configuring loadbalancer
+  hosts: lb 
+  tasks:
+          - name: installing haproxy
+            yum:
+                    name: haproxy
+                    state: present
+
+          - name: configuring haproxy file
+            template:
+                    src: haproxy.cfg
+                    dest: /etc/haproxy/haproxy.cfg
+
+          - name: starting load balancer
+            service:
+                    name: haproxy
+                    state: restarted
+
+
+- name: configuring backend servers
+  hosts: servers
+  tasks:
+          - name: installing httpd
+            yum:
+                    name:
+                            - httpd
+                            - php
+                    state: present
+
+          - name: copying php file
+            copy:
+                    src: index.php
+                    dest: /var/www/html/
+
+          - name: giving file permissions
+            shell: "chmod +x /var/www/html/index.php"
+
+          - name: starting httpd
+            service:
+                    name: httpd
+                    state: restarted

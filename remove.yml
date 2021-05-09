@@ -1,0 +1,25 @@
+- name: remove haproxy
+  hosts: tag_Name_LB
+  tasks:
+          - name: removing haproxy files
+            file:
+                    path: /etc/haproxy/haproxy.cfg
+                    state: absent
+
+          - name: removing haproxy
+            yum:
+                    name: haproxy
+                    state: absent
+
+- name: remove httpd
+  hosts: tag_Name_servers
+  tasks:
+          - file:
+                  path: /var/www/html/index.php
+                  state: absent
+
+          - yum:
+                  name:
+                          - php
+                          - httpd
+                  state: absent

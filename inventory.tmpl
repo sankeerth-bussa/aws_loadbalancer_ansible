@@ -1,0 +1,7 @@
+[lb]
+${lb}
+
+[servers]
+%{ for ip in server ~}
+${ip}
+%{ endfor ~}
